@@ -1,0 +1,15 @@
+{
+  "components": {
+    "qdsdp-qdrd-calendar": {
+      "innerComponents": [],
+      "uiBuilder": {
+        "associatedTypes": ["global.core", "global.landing-page"],
+        "label": "QDRD Calendar",
+        "icon": "calendar-outline",
+        "description": "QDRD Calendar Custom Calendar",
+        "category": "primitives"
+      }
+    }
+  },
+  "scopeName": "x_qdsdp_calendar"
+}
