@@ -1,4 +1,9 @@
-import Calendar from "tui-calendar";
+import {
+    Calendar
+} from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 
 function addDays(date, days) {
     var newDate = new Date(date);
@@ -6,61 +11,44 @@ function addDays(date, days) {
     return newDate;
 }
 
-function testDetailPopup(){
-    alert('here we go');
-}
-
 const qdrd_calendar = {
-	calendarInstance: "",
+    calendarInstance: "",
 
     newCalender(calender_element) {
-	    this.calendarInstance = new Calendar(calender_element, {
-			defaultView: "month",
-			taskView: true,           
-			useDetailPopup: true,
-			useCreationPopup: true,
-            template: {
-                monthDayname: function(dayname) {
-                    return '<span class="calendar-week-dayname-name">' + dayname.label + '</span>';
+        console.log('initializing calendar');
+        this.calendarInstance = new Calendar(calender_element, {
+            plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            events: [{ // this object will be "parsed" into an Event Object
+                    title: 'The Title', // a property!
+                    start: '2021-12-01', // a property!
+                    end: '2021-12-02' // a property! ** see important note below about 'end' **
                 },
-                popupSave: function() {
-                    return 'Save';
-                },
-                popupUpdate: function() {
-                    return 'Update';
-                },
-                popupDetailDate: function(isAllDay, start, end) {
-                    var isSameDate = moment(start).isSame(end);
-                    var endFormat = (isSameDate ? '' : 'YYYY.MM.DD ') + 'hh:mm a';
-        
-                    if (isAllDay) {
-                        return moment(start).format('YYYY.MM.DD') + (isSameDate ? '' : ' - ' + moment(end).format('YYYY.MM.DD'));
-                    }
-        
-                    return (moment(start).format('YYYY.MM.DD hh:mm a') + ' - ' + moment(end).format(endFormat));
-                },
-                popupDetailLocation: function(schedule) {
-                    return 'Location : ' + schedule.location;
-                },
-                popupDetailUser: function(schedule) {
-                    return 'User : ' + (schedule.attendees || []).join(', ');
-                },
-                popupDetailState: function(schedule) {
-                    return 'State : ' + schedule.state || 'Busy';
-                },
-                popupDetailRepeat: function(schedule) {
-                    return 'Repeat : ' + schedule.recurrenceRule;
-                },
-                popupDetailBody: function(schedule) {
-                    return 'Body : ' + schedule.body;
+                { // this object will be "parsed" into an Event Object
+                    title: 'The Title', // a property!
+                    start: '2021-12-28', // a property!
+                    end: '2021-12-29' // a property! ** see important note below about 'end' **
                 }
+            ],
+            eventClick: function(info) {
+                alert('Event: ' + info.event.title);
+                alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                alert('View: ' + info.view.type);
+
+                // change the border color just for fun
+                info.el.style.borderColor = 'red';
             }
-        })
-	},
+        });
+    },
 
     get calendar() {
-		return this.calendarInstance;
-	},
+        return this.calendarInstance;
+    },
 
     set calendar(value) {
         this.calendarInstance = value;
@@ -69,15 +57,13 @@ const qdrd_calendar = {
     recurringDates(startDate, endDate, interval) {
         var date = startDate;
         var dates = [];
-      
+
         while ((date = addDays(date, interval)) < endDate) {
             dates.push(date);
         }
-      
+
         return dates;
     },
-
-    
 };
 
 export default qdrd_calendar;
