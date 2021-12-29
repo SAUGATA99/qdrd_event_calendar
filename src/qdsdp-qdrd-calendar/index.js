@@ -3,6 +3,7 @@ import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 const { COMPONENT_DOM_READY, COMPONENT_RENDERED } = actionTypes;
 import qdrd_calendar from "./calendar";
+import qdrdAction from "./action";
 
 const view = (state, { updateState }) => {
 	return (
@@ -48,35 +49,10 @@ createCustomElement("qdsdp-qdrd-calendar", {
 	renderer: { type: snabbdom },
 	view,
 	styles,
-	actionHandlers: {
-		[COMPONENT_DOM_READY]: (coeffects) => {
-			var calender_element = coeffects.host.shadowRoot.childNodes[1];
-			calendar.newCalender(calender_element);
-		},
-		[COMPONENT_RENDERED]: (coeffects) => {
-			console.log("calendar: ", qdrd_calendar.calendar());
-			var calendar = qdrd_calendar.calendar();
-			calendar.createSchedules([
-				{
-					id: "1",
-					calendarId: "1",
-					title: "my schedule",
-					category: "time",
-					dueDateClass: "",
-					start: "2018-01-18T22:30:00+09:00",
-					end: "2018-01-19T02:30:00+09:00",
-				},
-				{
-					id: "2",
-					calendarId: "1",
-					title: "second schedule",
-					category: "time",
-					dueDateClass: "",
-					start: "2018-01-18T17:30:00+09:00",
-					end: "2018-01-19T17:31:00+09:00",
-					isReadOnly: true, // schedule is read-only
-				},
-			]);
-		},
-	},
+	setInitialState() {
+        return {
+            qdrdCalendar1: 'Hello'
+        };
+    },
+	...qdrdAction
 });
